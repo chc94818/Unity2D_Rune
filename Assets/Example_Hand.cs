@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 public class Example_Hand : MonoBehaviour
 {
+    //檔案控制---------------------------------------------------------------------------
+    private const string FILE_NAME = "train.data";
+    fileControl f = new fileControl();
+    //-----------------------------------------------------------------------------------
+
     //宣告最大數與最小數------------------------------------------------------------------
     const float MIN = float.MinValue;
     const float MAX = float.MaxValue;
@@ -28,6 +33,8 @@ public class Example_Hand : MonoBehaviour
 
     //符文設定----------------------------------------------------------------------------
     //最大符文筆畫
+    public int expectNumber = 0;
+
     private int maxStroke = 10;
 
     public string[] rBit = { "0",
@@ -63,23 +70,30 @@ public class Example_Hand : MonoBehaviour
     //-----------------------------------------------------------------------------------
 
     
-    public Text dt;//畫面上的text
+    public Text textPattern;//畫面上的text
+    public Text textExpect;//畫面上的text
 
+    //-----------------------------------------------------------------------------------
+    void setExpect()
+    {
+        expectNumber = (int)Random.Range(0, 9);
+        textExpect.text = expectNumber+"";
+    }
 
     //設置text 顯示符文種類
     void setRune(int index)
     {
-        dt.text = rune[index];
+        textPattern.text = rune[index];
     }
     void setData(int[,] d)
     {
-        dt.text = "";
+        textPattern.text = "";
         for(int i = d.GetLength(0)-1; i >=0 ; i--){
             for (int j = 0; j < d.GetLength(1); j++)
             {
-                dt.text += d[i,j]+" ";
+                textPattern.text += d[i,j]+" ";
             }
-            dt.text += "\n";
+            textPattern.text += "\n";
         }
         
     }
@@ -87,12 +101,19 @@ public class Example_Hand : MonoBehaviour
     //初始化
     void Start()
     {
+        setExpect();
+        //f.fileRead(FILE_NAME);
         isPressed = false;
     }
 
     //每一張frame會呼叫一次update
     void Update()
     {
+
+        if (expectNumber == 0)
+        {
+            setExpect();
+        }
         //偵測是使用滑鼠還是觸控面板
         #if UNITY_EDITOR || UNITY_STANDALONE
             MouseInput();   // 滑鼠偵測
@@ -358,9 +379,23 @@ public class Example_Hand : MonoBehaviour
         
 
         setData(data);
+        f.fileWrite(FILE_NAME, dataToString(data));
+        expectNumber = 0;
     }
 
-
+    string dataToString(int[,] data)
+    {
+        string s = "";
+        for(int i = 0;i< data.GetLength(0); i++)
+        {
+            for (int j = 0; j < data.GetLength(1); j++)
+            {
+                s += data[i, j]+" ";
+            }
+        }
+        s += expectNumber;
+        return s;
+    }
     //------------------------------------------------------------------------------------------------------ 
 
 
