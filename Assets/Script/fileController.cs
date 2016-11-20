@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 using UnityEngine;
 public class fileControl
 {
@@ -10,18 +10,50 @@ public class fileControl
     StreamReader srReader;
     string FILE_TRAIN;//TRAIN DATA的檔案名稱
     string FILE_WEIGHT;//WEIGHT DATA的檔案名稱
+    fileInitial fi;//weight data原始存放
     //--------------------------------------------------------------------------------------------------
     //寫入WEIGHT檔案-------------------------------------------------------------------------------------
-    public fileControl(string DPath)
+    public fileControl()
     {
-        FILE_TRAIN = DPath + "/StreamingAssets/train.data";//TRAIN DATA的檔案名稱
-        FILE_WEIGHT = DPath + "/StreamingAssets/weight.data";//WEIGHT DATA的檔案名稱
+        FILE_TRAIN = Application.persistentDataPath + "/train.data";//TRAIN DATA的檔案名稱
+        FILE_WEIGHT = Application.persistentDataPath + "/weight.data";//WEIGHT DATA的檔案名稱        
+        fileInit();
     }
+    /*public string getPath()
+    {
+        return FILE_WEIGHT;
+    }*/
+    void fileInit()
+    {
+        //文件流信息       
+        FileInfo t = new FileInfo(FILE_TRAIN);
+        if (!t.Exists)
+        {
+            //如果此文件不存在则创建
+            t.Create();
+        }
+        t = new FileInfo(FILE_WEIGHT);
+        if (!t.Exists)
+        {
+            //如果此文件不存在则创建
+            swWriter = t.CreateText();
+            fi = new fileInitial();
+            string[] wd = fi.getWeight();
+            for(int i = 0; i < wd.Length; i++)
+            {
+                swWriter.WriteLine(wd[i]);
+            }
+            swWriter.Close();
+        }   
+  
+    }
+    
     public void weightDataWrite(List<string> weightData)
     {
         try
         {
-            swWriter = new StreamWriter(FILE_WEIGHT);//建立streamWriter     
+
+            swWriter = new StreamWriter(FILE_WEIGHT);//建立streamWriter   
             foreach (string wString in weightData)
             {
                 swWriter.WriteLine(wString); //寫入數據
@@ -68,7 +100,7 @@ public class fileControl
     }
     //--------------------------------------------------------------------------------------------------
     //寫入TRAIN檔案-----------------------------------------------------------------------------------------
-    public void trainDataWrite(string data)
+    /*public void trainDataWrite(string data)
     {
 
         try
@@ -117,5 +149,5 @@ public class fileControl
 
     }
     //--------------------------------------------------------------------------------------------------
-
+    */
 }

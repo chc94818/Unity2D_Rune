@@ -80,6 +80,7 @@
     <Compile Include="Assets\Script\MLP.cs" />
     <Compile Include="Assets\Script\Perceptron.cs" />
     <Compile Include="Assets\Script\fileController.cs" />
+    <Compile Include="Assets\Script\fileInitial.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

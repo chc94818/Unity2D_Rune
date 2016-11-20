@@ -9,17 +9,17 @@ using UnityEngine;
         //宣告-----------------------------------------------------------------------------------------------        
         //double rmse;//方差
         fileControl fc;//建立fileControl來進行檔案操作
-        double sum; //計算資料筆數
-        double hit; //命中資料筆數
-        double hitRate;//命中率
+        //double sum; //計算資料筆數
+        //double hit; //命中資料筆數
+        //double hitRate;//命中率
         List<double[]> weightData = new List<double[]>();//每一個神經元的權重
         List<Perceptron[]> mlp = new List<Perceptron[]>();//多層類神經網路LIST mlp[0] = 輸入層 mlp[n] = 第n層
         //--------------------------------------------------------------------------------------------------
         //MLP CONSTRUCT-------------------------------------------------------------------------------------
         //int[] layer 表示隱藏層跟輸出層的神經元個數
-        public MLP(int[] layer, int dimension, double learn,string DPath)
+        public MLP(int[] layer, int dimension, double learn)
         {
-            fc = new fileControl(DPath);
+            fc = new fileControl();
             weightData = fc.WeightDataRead();//儲存各神經元權重
             int wdPointer = 0;//weight data指標
 
@@ -195,9 +195,8 @@ using UnityEngine;
                     }
                 }
             }
-
             //--------------------------------------------------------------------------------------------------
-        
+
     }
     //--------------------------------------------------------------------------------------------------
 
@@ -205,15 +204,15 @@ using UnityEngine;
     public void Test(List<int[]> testData)
         {
             //SUM = 測試總次數  HIT = 命中次數   hitRate = 命中率
-            sum = 0;
-            hit = 0;
-            hitRate = 0;
+            //sum = 0;
+            //hit = 0;
+            //hitRate = 0;
             //double eTemp;
             //rmse = 0;
             //對每一組DATA做運算
             foreach (int[] td in testData)
             {
-                sum++;//計算了一筆資料
+                //sum++;//計算了一筆資料
                 //前饋階段-------------------------------------------------------------------------------------------  
                 //輸入資料為 測試資料的 0~N-1，第N個為expect
                 //輸入資料的 inputData[0] = -1 用來跟w0計算閥值
@@ -249,12 +248,12 @@ using UnityEngine;
                 int result = Decoder(encode);//換算成十進制結果
                 if (result == td[td.Length - 1])//結果相同則命中
                 {
-                    hit++;//命中了一筆資料
+                    //hit++;//命中了一筆資料
                 }
 
                 //--------------------------------------------------------------------------------------------------
             }
-            hitRate = hit * 100 / sum;//計算命中率
+            //hitRate = hit * 100 / sum;//計算命中率
             //Console.WriteLine("hit rate is : " + hitRate + " %");
         }
     //--------------------------------------------------------------------------------------------------

@@ -5,10 +5,7 @@ using System.Collections.Generic;
 
 public class Example_Hand : MonoBehaviour
 {
-    //檔案控制---------------------------------------------------------------------------
-    fileControl fc;
-    //-----------------------------------------------------------------------------------
-
+    
     //宣告最大數與最小數------------------------------------------------------------------
     const float MIN = float.MinValue;
     const float MAX = float.MaxValue;
@@ -59,15 +56,8 @@ public class Example_Hand : MonoBehaviour
     //START初始化------------------------------------------------------------------------
     void Start()
     {
-        #if UNITY_EDITOR || UNITY_STANDALONE
-                string DPath = Application.dataPath;
-
-        #elif UNITY_ANDROID
-		         string DPath = Application.streamingAssetsPath;
-        #endif
-
-        fc = new fileControl(DPath);
-        PR = new MLP(new int[] { 100, 8 }, 100, learn,DPath);
+        
+        PR = new MLP(new int[] { 100, 8 }, 100, learn);       
         setExpected();
         isPressed = false;
     }
@@ -76,7 +66,7 @@ public class Example_Hand : MonoBehaviour
     //每一張frame會呼叫一次update
     void Update()
     {
-
+        
         if (expectNumber == 0)
         {
             setExpected();
@@ -87,7 +77,7 @@ public class Example_Hand : MonoBehaviour
         #elif UNITY_ANDROID
 		                    MobileInput();  // 觸碰偵測
         #endif
-
+        
     }
     //-----------------------------------------------------------------------------------
 
@@ -173,9 +163,9 @@ public class Example_Hand : MonoBehaviour
         else if (Input.GetMouseButtonUp(0))
         {
             //判斷符文
-            setLast();
-            pattern = dataNormalize();
-            setRecognized(PR.Recognize(pattern));            
+            setLast();//顯示上一輪期望值
+            pattern = dataNormalize();//圖形正規化
+            setRecognized(PR.Recognize(pattern));//識別圖形並顯示                  
             //設定成未按著滑鼠
             isPressed = false;
 
@@ -239,9 +229,9 @@ public class Example_Hand : MonoBehaviour
             {
 
                 //判斷符文
+                setLast();//顯示上一輪期望值
                 pattern = dataNormalize();//圖形正規化
-                setRecognized(PR.Recognize(pattern));//識別圖形並顯示
-                setLast();
+                setRecognized(PR.Recognize(pattern));//識別圖形並顯示                
                 //設定成未按著滑鼠
                 isPressed = false;
 
@@ -343,7 +333,7 @@ public class Example_Hand : MonoBehaviour
 
 
         setPattern(data);//畫出圖形
-        fc.trainDataWrite(dataToString(data));//寫入資料中
+       
         PR.Train(dataToIntArray(data));//訓練該筆資料
         expectNumber = 0;//重置
         return dataToIntArray(data);
